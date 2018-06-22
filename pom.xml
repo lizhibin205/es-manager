@@ -1,0 +1,118 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.tcpan</groupId>
+  <artifactId>es-manager</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>es-manager</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.elasticsearch.client</groupId>
+      <artifactId>elasticsearch-rest-high-level-client</artifactId>
+      <version>6.3.0</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-httpclient</groupId>
+      <artifactId>commons-httpclient</artifactId>
+      <version>3.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.zenframework.z8.dependencies.commons</groupId>
+      <artifactId>commons-cli-1.0</artifactId>
+      <version>2.0</version>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-to-slf4j</artifactId>
+        <version>2.11.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.7.25</version>
+    </dependency>
+  </dependencies>
+
+  <build>    
+      <plugins>  
+        <plugin>  
+              <groupId>org.apache.maven.plugins</groupId>  
+              <artifactId>maven-compiler-plugin</artifactId>  
+              <version>3.1</version>  
+              <configuration>  
+                  <compilerVersion>1.6</compilerVersion>  
+                  <source>1.6</source>  
+                  <target>1.6</target>  
+              </configuration>  
+         </plugin>    
+          <!-- The configuration of maven-jar-plugin -->    
+        <plugin>    
+            <groupId>org.apache.maven.plugins</groupId>    
+            <artifactId>maven-jar-plugin</artifactId>    
+            <version>2.4</version>    
+            <!-- The configuration of the plugin -->    
+            <configuration>    
+                <!-- Configuration of the archiver -->    
+                <archive>    
+    
+                    <!-- do not include pom.xml and pom.properties in the jar package -->    
+                    <addMavenDescriptor>false</addMavenDescriptor>    
+    
+                    <!-- Manifest specific configuration -->    
+                    <manifest>    
+                      
+                        <!-- put third party jar package into the classpath of manifest -->    
+                        <addClasspath>true</addClasspath>    
+                        <!-- the prefix of the jar items in the classpath, it depends on the location(folder) of jar files -->    
+                        <classpathPrefix>lib/</classpathPrefix>    
+                        <!-- main class of the jar package-->    
+                        <mainClass>com.tcpan.es_manager.App</mainClass>    
+                    </manifest>    
+                </archive>    
+                <!-- excludes some files -->    
+                <excludes>    
+                    <exclude>${project.basedir}/xml/*</exclude>    
+                </excludes>    
+            </configuration>    
+        </plugin>    
+    
+        <!-- The configuration of maven-assembly-plugin -->    
+        <plugin>    
+            <groupId>org.apache.maven.plugins</groupId>    
+            <artifactId>maven-assembly-plugin</artifactId>    
+            <version>2.4</version>    
+            <!-- The configuration of the plugin -->    
+            <configuration>    
+                <!-- Specifies the configuration file of the assembly plugin -->    
+                <descriptors>    
+                    <descriptor>conf/package.xml</descriptor>    
+                </descriptors>    
+            </configuration>    
+            <executions>    
+                <execution>    
+                    <id>make-assembly</id>    
+                    <phase>package</phase>    
+                    <goals>    
+                        <goal>single</goal>    
+                    </goals>    
+                </execution>    
+            </executions>    
+        </plugin>     
+      </plugins>    
+  </build>    
+</project>
