@@ -10,6 +10,9 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.http.HttpHost;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
 import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
@@ -18,20 +21,22 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.TimeValue;
 
 /**
- * Hello world!
+ * App
  *
  */
-public class App 
+public class App
 {
-    public static void main( String[] args )
+    private static final Logger logger = LoggerFactory.getLogger(App.class);
+
+    public static void main(String[] args)
     {
     	try {
     		//parse params
     		CommandLineParser parser = new BasicParser();
-    		Options options = new Options( );
-    		options.addOption("h", "host", true, "ES service host.");
-    		options.addOption("p", "port", true, "ES service port.");
-    		options.addOption("d", "days", true, "Delete ES indeices which created [n] days ago.");
+    		Options options = new Options();
+    		options.addOption("h", "host", true, "Elasticsearch service host.");
+    		options.addOption("p", "port", true, "Elasticsearch service port.");
+    		options.addOption("d", "days", true, "Delete elasticsearch indeices which created [n] days ago.");
     		CommandLine commandLine = parser.parse(options, args);
     		
     		//get params
@@ -41,26 +46,26 @@ public class App
     		if (commandLine.hasOption("h")) {
     			esHost = commandLine.getOptionValue("h");
     		} else {
-    			System.out.println("[Error] You should provide es host.");
+    			logger.error("You should provide elasticsearch host.");
     			return;
     		}
     		if (commandLine.hasOption("p")) {
     			esPort = Integer.parseInt(commandLine.getOptionValue("p"));
     		} else {
-    			System.out.println("[Error] You should provide es port.");
+    			logger.error("You should provide elasticsearch port.");
     			return;
     		}
     		if (commandLine.hasOption("d")) {
     			esDeleteDays = Integer.parseInt(commandLine.getOptionValue("d"));
     		} else {
-    			System.out.println("[Error] You should provide es port.");
+    			logger.error("You should provide a number, use for delete elasticsearch indeices which created [n] days ago.");
     			return;
     		}
     		
     		//get all index
     		ArrayList<String> indeicesList = Helper.getIndices(esHost, esPort);
     		if (indeicesList == null || indeicesList.size() == 0) {
-    			System.out.println("[Error] Could't get indeices");
+    			logger.error("Could't get indeices.");
     			return;
     		}
 
@@ -71,8 +76,7 @@ public class App
     		Pattern regxPattern = Pattern.compile(pattern);
     		for (String index : indeicesList) {
     			//正则匹配如下类型的index
-    			//logstash-2018.06.15 
-    			//System.out.println(index);
+    			//logstash-2018.06.15
     			Matcher matcheList = regxPattern.matcher(index);
     			if (matcheList.find()) {
     				//判断日期
@@ -93,27 +97,26 @@ public class App
     			GetIndexRequest request = new GetIndexRequest();
     			request.indices(indexName);
     			if (esClient.indices().exists(request)) {
-    				System.out.println("[Message] Index[" + indexName + "] found.");
+    				logger.debug("Index[" + indexName + "] found.");
 
     				DeleteIndexRequest deleteRequest = new DeleteIndexRequest(indexName);
     				deleteRequest.timeout(TimeValue.timeValueSeconds(30));
     				DeleteIndexResponse deleteIndexResponse = esClient.indices().delete(deleteRequest);
     				if (deleteIndexResponse.isAcknowledged()) {
-    					System.out.println("[Message] Delete index[" + indexName + "] success.");
+    					logger.debug("Delete index[" + indexName + "] success.");
     				} else {
-    					System.out.println("[Message] Delete index[" + indexName + "] fail.");
+    					logger.debug("Delete index[" + indexName + "] fail.");
     				}
     			} else {
-    				System.out.println("[Message] Index[" + indexName + "] not found.");
+    				logger.error("Index[" + indexName + "] not found.");
     			}
     		}
     		
     		esClient.close();
     	} catch (Exception ex) {
-    		System.out.println(ex.getMessage());
-    		ex.printStackTrace();
+    		logger.error(ex.getMessage());
     	}
     	//end
-    	System.out.println("[Message] done!");
+    	logger.debug("done.");
     }
 }
