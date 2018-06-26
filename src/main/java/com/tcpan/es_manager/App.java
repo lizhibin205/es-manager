@@ -87,6 +87,7 @@ public class App
     				}
     			}
     		}
+    		logger.info("Indeices length: " + indeicesList.size() + ".");
 
     		//es client
     		RestHighLevelClient esClient = new RestHighLevelClient(
@@ -97,15 +98,15 @@ public class App
     			GetIndexRequest request = new GetIndexRequest();
     			request.indices(indexName);
     			if (esClient.indices().exists(request)) {
-    				logger.debug("Index[" + indexName + "] found.");
+    				logger.info("Index[" + indexName + "] found.");
 
     				DeleteIndexRequest deleteRequest = new DeleteIndexRequest(indexName);
     				deleteRequest.timeout(TimeValue.timeValueSeconds(30));
     				DeleteIndexResponse deleteIndexResponse = esClient.indices().delete(deleteRequest);
     				if (deleteIndexResponse.isAcknowledged()) {
-    					logger.debug("Delete index[" + indexName + "] success.");
+    					logger.info("Delete index[" + indexName + "] success.");
     				} else {
-    					logger.debug("Delete index[" + indexName + "] fail.");
+    					logger.info("Delete index[" + indexName + "] fail.");
     				}
     			} else {
     				logger.error("Index[" + indexName + "] not found.");
@@ -117,6 +118,6 @@ public class App
     		logger.error(ex.getMessage());
     	}
     	//end
-    	logger.debug("done.");
+    	logger.info("done.");
     }
 }
