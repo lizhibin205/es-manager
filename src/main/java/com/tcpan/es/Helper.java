@@ -1,4 +1,4 @@
-package com.tcpan.es_manager;
+package com.tcpan.es;
 
 import java.io.BufferedReader;
 import java.io.IOException;

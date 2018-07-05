@@ -1,4 +1,4 @@
-package com.tcpan.es_manager;
+package com.tcpan.es;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import org.elasticsearch.common.unit.TimeValue;
  */
 public class App
 {
-    private static final Logger logger = LoggerFactory.getLogger(App.class);
+    private static final Logger logger = LoggerFactory.getLogger("es-manager");
 
     public static void main(String[] args)
     {

@@ -81,7 +81,7 @@
                         <!-- the prefix of the jar items in the classpath, it depends on the location(folder) of jar files -->    
                         <classpathPrefix>lib/</classpathPrefix>    
                         <!-- main class of the jar package-->    
-                        <mainClass>com.tcpan.es_manager.App</mainClass>    
+                        <mainClass>com.tcpan.es.App</mainClass>    
                     </manifest>    
                 </archive>    
                 <!-- excludes some files -->    
