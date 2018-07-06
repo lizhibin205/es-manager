@@ -10,9 +10,10 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.http.HttpHost;
+import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+ 
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;
 import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
@@ -26,7 +27,13 @@ import org.elasticsearch.common.unit.TimeValue;
  */
 public class App
 {
-    private static final Logger logger = LoggerFactory.getLogger("es-manager");
+    public static Logger logger = null;
+    
+    static {
+    	//log4j setting
+    	PropertyConfigurator.configure("conf/log4j.properties");
+    	logger = LoggerFactory.getLogger("es-manager");
+    }
 
     public static void main(String[] args)
     {
