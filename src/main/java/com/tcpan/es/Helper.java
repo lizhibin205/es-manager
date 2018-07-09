@@ -12,7 +12,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 
-class Helper 
+public class Helper 
 {
 	public static ArrayList<String> getIndices(String host, int port)
 	{
