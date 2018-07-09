@@ -7,6 +7,7 @@ import org.apache.commons.cli.Options;
 
 class AppParam 
 {
+	private String workpath;
 	private String esHost;
 	private int esPort;
 	private int esDeleteDays;
@@ -18,12 +19,18 @@ class AppParam
 		//parse params
 		CommandLineParser parser = new BasicParser();
 		Options options = new Options();
+		options.addOption("wp", "workpath", true, "workpath");
 		options.addOption("h", "host", true, "Elasticsearch service host.");
 		options.addOption("p", "port", true, "Elasticsearch service port.");
 		options.addOption("d", "days", true, "Delete elasticsearch indeices which created [n] days ago.");
 		CommandLine commandLine = parser.parse(options, args);
 		
 		//get params
+		if (commandLine.hasOption("wp")) {
+			appParam.workpath = commandLine.getOptionValue("wp");
+		} else {
+			throw new Exception("You should provide workpath.");
+		}
 		if (commandLine.hasOption("h")) {
 			appParam.esHost = commandLine.getOptionValue("h");
 		} else {
@@ -41,6 +48,11 @@ class AppParam
 		}
 
 		return appParam; 
+	}
+
+	public String getWorkpath()
+	{
+		return workpath;
 	}
 
 	public String getEsHost()

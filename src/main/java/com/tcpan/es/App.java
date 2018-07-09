@@ -13,17 +13,16 @@ import com.tcpan.es.component.*;
 public class App
 {
     public static Logger logger = null;
-    
-    static {
-    	//log4j setting
-    	PropertyConfigurator.configure("conf/log4j.properties");
-    	logger = LoggerFactory.getLogger("es-manager");
-    }
 
     public static void main(String[] args)
     {
     	try {
+    		//param
     		AppParam appParam = AppParam.parseParam(args);
+    		
+    		//log4j setting
+        	PropertyConfigurator.configure(appParam.getWorkpath() + "/conf/log4j.properties");
+        	logger = LoggerFactory.getLogger("es-manager");
 
     		//run component
     		IndicesDailyDelete component = new IndicesDailyDelete(logger);
