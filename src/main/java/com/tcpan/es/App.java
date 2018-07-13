@@ -3,8 +3,8 @@ package com.tcpan.es;
 import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
- 
-import com.tcpan.es.component.*;
+
+import com.tcpan.es.component.IndicesDailyDelete;
 
 /**
  * App
@@ -21,7 +21,7 @@ public class App
     		AppParam appParam = AppParam.parseParam(args);
     		
     		//log4j setting
-        	PropertyConfigurator.configure(appParam.getWorkpath() + "/conf/log4j.properties");
+        	PropertyConfigurator.configure(System.getProperty("app.workpath") + "/conf/log4j.properties");
         	logger = LoggerFactory.getLogger("es-manager");
 
     		//run component
