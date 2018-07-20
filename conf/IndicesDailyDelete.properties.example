@@ -1,0 +1,3 @@
+#IndicesDailyDelete config
+#findNeedDeleteIndeices
+IndicesDailyDelete.DeleteDays=365
