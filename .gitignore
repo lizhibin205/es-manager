@@ -2,5 +2,6 @@
 javadoc/
 target/
 logs/
+conf/*.properties
 .classpath
 .project

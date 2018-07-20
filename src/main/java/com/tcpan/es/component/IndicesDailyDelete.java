@@ -1,10 +1,13 @@
 package com.tcpan.es.component;
 
 import java.text.SimpleDateFormat;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,17 +22,32 @@ import org.slf4j.Logger;
 
 import com.tcpan.es.Helper;
 
-public class IndicesDailyDelete 
-{
-	private Logger logger = null;
+public class IndicesDailyDelete extends Component{
+	private String esHost = "127.0.0.1";
+	private int esPort = 9200;
+	private int esDeleteDays = 365;//default
 
-	public IndicesDailyDelete(Logger logger)
-	{
-		this.logger = logger;
+	public IndicesDailyDelete(String workpath) {
+		super(workpath);
 	}
 
-	public void start(String esHost, int esPort, int esDeleteDays)
-	{
+	@Override
+	public Component init() throws Exception {
+		//load config
+		Properties properties = new Properties();
+		BufferedReader bufferedReader = new BufferedReader(new FileReader(workpath + "/conf/elasticsearch.properties"));
+		properties.load(bufferedReader);
+		esHost = properties.getProperty("elasticsearch.host");
+		esPort = Integer.parseInt(properties.getProperty("elasticsearch.port"));
+
+		bufferedReader = new BufferedReader(new FileReader(workpath + "/conf/IndicesDailyDelete.properties"));
+		properties.load(bufferedReader);
+		esDeleteDays = Integer.parseInt(properties.getProperty("IndicesDailyDelete.DeleteDays"));
+		return this;
+	}
+
+	@Override
+	public void start(Logger logger) {
 		//get all index
 		ArrayList<String> indeicesList = Helper.getIndices(esHost, esPort);
 		if (indeicesList == null || indeicesList.size() == 0) {
@@ -71,8 +89,7 @@ public class IndicesDailyDelete
 		}
 	}
 
-	private ArrayList<String> findNeedDeleteIndeices(ArrayList<String> indeicesList, int esDeleteDays)
-	{
+	private ArrayList<String> findNeedDeleteIndeices(ArrayList<String> indeicesList, int esDeleteDays) {
 		Date nowDate = new Date();
 		ArrayList<String> needDeleteIndeices = new ArrayList<String>();
 		String pattern = "\\d{4}\\.\\d{2}\\.\\d{2}$";
@@ -94,7 +111,7 @@ public class IndicesDailyDelete
 				}
 			}
 		}
-		
+
 		return needDeleteIndeices;
 	}
 }
